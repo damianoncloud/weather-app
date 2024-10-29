@@ -1,7 +1,11 @@
-const Button = () => {
+interface ButtonProps {
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+const Button = (props: ButtonProps) => {
   return (
     <div>
-      <button>Search</button>
+      <button onClick={props.onClick}>Search</button>
     </div>
   );
 };

@@ -9,6 +9,7 @@ interface WeatherData {
   temperature: number;
   windspeed: number;
   humidity: number;
+  weatherCode: number;
 }
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
         temperature: weatherData.current_weather.temperature,
         windspeed: weatherData.current_weather.windspeed,
         humidity: Math.round(dailyAverageHumidity),
+        weatherCode: weatherData.current_weather.weathercode,
       });
 
       setCurrentCity(userInput);
@@ -71,22 +73,14 @@ function App() {
         />
         <Button onClick={getCityWeather} />
       </div>
-      {userInput}
       {console.log(weatherData)}
-      {weatherData && (
-        <div className="weather-info">
-          <p>Temperatura: {weatherData.temperature}°C</p>
-          <p>Velocità del vento: {weatherData.windspeed} km/h</p>
-          <p>Umidità: {weatherData.humidity}%</p>
-        </div>
-      )}
-
       {weatherData && (
         <WeatherCard
           temperature={weatherData.temperature}
           windspeed={weatherData.windspeed}
           humidity={weatherData.humidity}
           cityName={currentCity}
+          weatherCode={weatherData.weatherCode}
         />
       )}
     </>

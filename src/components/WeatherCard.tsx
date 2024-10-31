@@ -76,12 +76,31 @@ const WeatherCard = (props: WeatherCardProps) => {
           cityName: props.cityName,
         },
       ]);
+      // Saving favourite cities into LocalStorage
+      // Creating an array with favourite city names
+      const favouriteCitiesLocalStorage = [
+        ...props.favouriteCities.map((city) => city.cityName),
+        props.cityName,
+      ];
+      // Saving the array to LocalStorage after converting it to string
+      localStorage.setItem(
+        "favouriteCitiesLocalStorage",
+        JSON.stringify(favouriteCitiesLocalStorage)
+      );
     } else {
       // Removing the city from favourites
       props.setFavouriteCities(
         props.favouriteCities.filter(
           (favouriteCity) => favouriteCity.cityName !== props.cityName
         )
+      );
+      // Updating LocalStorage
+      const updatedFavouriteCities = props.favouriteCities.filter(
+        (city) => city.cityName !== props.cityName
+      );
+      localStorage.setItem(
+        "favouriteCitiesLocalStorage",
+        JSON.stringify(updatedFavouriteCities)
       );
     }
     setIsFavourite(!isFavourite);

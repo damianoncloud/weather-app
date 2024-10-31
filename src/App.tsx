@@ -5,17 +5,19 @@ import Button from "./components/Button";
 import { ChangeEvent, useState } from "react";
 import WeatherCard from "./components/WeatherCard";
 
-interface WeatherData {
+export interface WeatherData {
   temperature: number;
   windspeed: number;
   humidity: number;
   weatherCode: number;
+  cityName: string;
 }
 
 function App() {
   const [userInput, setUserInput] = useState<string>("");
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [currentCity, setCurrentCity] = useState<string>("");
+  const [favouriteCities, setFavouriteCities] = useState<WeatherData[]>([]);
 
   const inputHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
@@ -49,6 +51,7 @@ function App() {
         windspeed: weatherData.current_weather.windspeed,
         humidity: Math.round(dailyAverageHumidity),
         weatherCode: weatherData.current_weather.weathercode,
+        cityName: city,
       });
 
       setCurrentCity(userInput);
@@ -81,8 +84,27 @@ function App() {
           humidity={weatherData.humidity}
           cityName={currentCity}
           weatherCode={weatherData.weatherCode}
+          favouriteCities={favouriteCities}
+          setFavouriteCities={setFavouriteCities}
         />
       )}
+      {favouriteCities.length > 0 && (
+        <>
+          <p>Favourite Cities are: </p>
+          {favouriteCities.map((favouriteCity) => (
+            <p key={favouriteCity.cityName}>
+              {favouriteCity.cityName}, {favouriteCity.temperature}
+            </p>
+          ))}
+        </>
+      )}
+
+      {/* <p>Favourite Cities are: </p>
+      {favouriteCities.map((favouriteCity) => (
+        <p key={favouriteCity.cityName}>
+          {favouriteCity.cityName}, {favouriteCity.temperature}
+        </p>
+      ))} */}
     </>
   );
 }

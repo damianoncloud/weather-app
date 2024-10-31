@@ -1,12 +1,27 @@
+import { useEffect, useState } from "react";
+import { WeatherData } from "../App";
+
 interface WeatherCardProps {
   temperature: number;
   windspeed: number;
   humidity: number;
   cityName: string;
   weatherCode: number;
+  favouriteCities: WeatherData[];
+  setFavouriteCities: (weatherData: WeatherData[]) => void;
 }
 
 const WeatherCard = (props: WeatherCardProps) => {
+  const [isFavourite, setIsFavourite] = useState<boolean>(false);
+
+  // UseEffect to check if the city belongs to favourites
+  useEffect(() => {
+    const cityIsFavourite = props.favouriteCities.some(
+      (city) => city.cityName === props.cityName
+    );
+    setIsFavourite(cityIsFavourite);
+  }, [props.cityName, props.favouriteCities]);
+
   const weatherIconsMap = new Map<number, string>([
     [0, "clear_sky.png"],
     [1, "partly_cloudy.png"],
@@ -44,11 +59,40 @@ const WeatherCard = (props: WeatherCardProps) => {
 
   const weatherIcon = getWeatherIcon(props.weatherCode);
 
+  const handleFavouriteClick = () => {
+    if (!isFavourite) {
+      // Adding the city to favourites
+      props.setFavouriteCities([
+        ...props.favouriteCities,
+        {
+          temperature: props.temperature,
+          windspeed: props.windspeed,
+          humidity: props.humidity,
+          weatherCode: props.weatherCode,
+          cityName: props.cityName,
+        },
+      ]);
+    } else {
+      // Removing the city from favourites
+      props.setFavouriteCities(
+        props.favouriteCities.filter(
+          (favouriteCity) => favouriteCity.cityName !== props.cityName
+        )
+      );
+    }
+    setIsFavourite(!isFavourite);
+  };
+
   return (
     <div className="text-white border border-gray-400 p-6 rounded">
       <div className="flex justify-between mb-6">
         <p className="text-xl">{props.cityName}</p>
-        <img src="./star.png" alt="favourite icon" width={24} />
+        <img
+          onClick={handleFavouriteClick}
+          src={isFavourite ? "./star-filled.png" : "./star.png"}
+          alt="favourite icon"
+          width={24}
+        />
       </div>
       <div className="">
         <div className="flex gap-4 mb-6">

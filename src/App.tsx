@@ -4,6 +4,7 @@ import Button from "./components/Button";
 // import WeatherCard from "./components/WeatherCard";
 import { ChangeEvent, useState } from "react";
 import WeatherCard from "./components/WeatherCard";
+import FavouriteCityCard from "./components/FavouriteCityCard";
 
 export interface WeatherData {
   temperature: number;
@@ -21,7 +22,6 @@ function App() {
 
   const inputHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
-    console.log("User input is: ", event.target.value);
   };
 
   const getCityWeather = async () => {
@@ -76,7 +76,6 @@ function App() {
         />
         <Button onClick={getCityWeather} />
       </div>
-      {console.log(weatherData)}
       {weatherData && (
         <WeatherCard
           temperature={weatherData.temperature}
@@ -90,21 +89,21 @@ function App() {
       )}
       {favouriteCities.length > 0 && (
         <>
-          <p>Favourite Cities are: </p>
+          <p className="text-gray-100 my-8">Favourite Cities are: </p>
           {favouriteCities.map((favouriteCity) => (
-            <p key={favouriteCity.cityName}>
-              {favouriteCity.cityName}, {favouriteCity.temperature}
-            </p>
+            <FavouriteCityCard
+              cityName={favouriteCity.cityName}
+              temperature={favouriteCity.temperature}
+              weatherCode={favouriteCity.weatherCode}
+              key={favouriteCity.cityName}
+            />
+
+            // <p key={favouriteCity.cityName}>
+            //   {favouriteCity.cityName}, {favouriteCity.temperature}
+            // </p>
           ))}
         </>
       )}
-
-      {/* <p>Favourite Cities are: </p>
-      {favouriteCities.map((favouriteCity) => (
-        <p key={favouriteCity.cityName}>
-          {favouriteCity.cityName}, {favouriteCity.temperature}
-        </p>
-      ))} */}
     </>
   );
 }
